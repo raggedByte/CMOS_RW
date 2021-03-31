@@ -33,7 +33,7 @@ VOID __cdecl main(
 {
     HANDLE hDevice;
     BOOL bRc;
-    BOOL bHexConverter = FALSE;
+    //BOOL bHexConverter = FALSE;
     ULONG bytesReturned;
     DWORD errNum = 0;
     TCHAR driverLocation[MAX_PATH];
@@ -95,9 +95,9 @@ VOID __cdecl main(
     }
 
     printf("Driver is ready. . . \r\n\
-HexConverter = %d\r\n\
-Type \"help\" for getting help usage\r\n", bHexConverter);
-
+Type \"help\" for getting help usage\r\n");
+    //HexConverter = % d\r\n\
+    
     while (command != COMMAND_EXIT) {
 
         command = CommandDispatcher(InputBuffer);
