@@ -183,6 +183,7 @@ NTSTATUS DeviceControlRoutine(
 		Irp->IoStatus.Information = 1;
 		break;
 
+	/*
 	case IOCTL_WRITE_BCD:
 		bcd = readcmos(0xB);
 		bcd = arg0 ? bcd | 0x2 : bcd & 0xFD;
@@ -190,6 +191,7 @@ NTSTATUS DeviceControlRoutine(
 		outBuf[0] = DRIVER_SUCCESS;
 		Irp->IoStatus.Information = 1;
 		break;
+		*/
 
 	default:
 		ntStatus = STATUS_INVALID_DEVICE_REQUEST;
