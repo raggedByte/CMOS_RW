@@ -23,8 +23,8 @@ BOOLEAN SetupDriverName(
     _In_ ULONG BufferLength
 );
 
-CHAR OutputBuffer[100];
-CHAR InputBuffer[100];
+UCHAR OutputBuffer[100];
+UCHAR InputBuffer[100];
 
 VOID __cdecl main(
     _In_ ULONG argc,
@@ -140,7 +140,7 @@ Type \"help\" for getting help usage\r\n");
         printf("Response from driver(%d bytes): \r\n", bytesReturned);
         for (ULONG i = 0; i < COLUMNS; i++)
         {
-            printf("%-5d ", i);
+            printf("%-5X ", i);
         }
         printf("\r\n");
         for (ULONG i = 0; i < COLUMNS; i++)
@@ -150,7 +150,7 @@ Type \"help\" for getting help usage\r\n");
         printf("\r\n");
         for (ULONG i = 0; i < bytesReturned; i++)
         {
-            printf("%-5d ", OutputBuffer[i]);
+            printf("%-5X ", OutputBuffer[i]);
             if ((i+1) % COLUMNS == 0)
                 printf("\r\n");
         }

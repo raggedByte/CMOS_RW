@@ -170,7 +170,7 @@ NTSTATUS DeviceControlRoutine(
 	case IOCTL_READ_CMOS:
 		for (CHAR i = arg0; i <= arg1; i++)
 		{
-			outBuf[i] = readcmos(i);
+			outBuf[i - arg0] = readcmos(i);
 			bytesReaded++;
 		}
 
