@@ -1,0 +1,131 @@
+Microsoft (R) Macro Assembler (x64) Version 14.28.29913.0   03/31/21 14:06:36
+asmcode.asm						     Page 1 - 1
+
+
+ 00000000			.DATA   
+
+ 00000000			.CODE
+
+ 00000000			foo PROC
+ 00000000  48/ C7 C0		mov RAX, 0
+	   00000000
+ 00000007			cycle:
+
+ 00000007  48/ 89 04 02		mov qword ptr [RDX + RAX], RAX
+ 0000000B  48/ FF C0		inc RAX
+ 0000000E  48/ 3B C1		cmp RAX, RCX
+ 00000011  75 F4		jnz cycle
+
+ 00000013  C3			ret
+ 00000014			foo ENDP
+				 
+ 00000014			fooa PROC
+ 00000014  48/ C7 C3		mov RBX, 0
+	   00000000
+ 0000001B			cycle:
+ 0000001B  8A C3			mov al, bl
+ 0000001D  E6 70			out 70h, al
+ 0000001F  E4 71			in al, 71h
+ 00000021  48/ 89 04 19			mov qword ptr[RCX + RBX], RAX
+ 00000025  48/ 83 FB 0C			cmp RBX, 12
+ 00000029  75 F0			jnz cycle
+ 0000002B  C3				ret
+ 0000002C			fooa ENDP
+
+ 0000002C			start PROC
+ 0000002C  B0 0B		        mov        al,0Bh               ; CMOS OBh - управл€ющий регистр ¬
+ 0000002E  E6 70		        out        70h,al               ; порт 70h - индекс CMOS
+ 00000030  E4 71		        in         al,71h               ; порт 71h - данные CMOS
+ 00000032  24 FB		        and        al,11111011b         ; обнулить бит 2 (форма чисел - BCD)
+ 00000034  E6 71		        out        71h,al               ; и записать обратно
+ 00000036  B0 32		        mov        al,32h               ; CMOS 32h - две старшие цифры года
+ 00000038  E8 00000043		        call       print_cmos           ; вывод на экран
+ 0000003D  B0 09		        mov        al,9                 ; CMOS 09h - две младшие цифры года
+ 0000003F  E8 0000003C		        call       print_cmos
+ 00000044  B0 2D		        mov        al,'-'               ; минус
+ 00000046  CD 29		        int        29h                  ; вывод на экран
+ 00000048  B0 08		        mov        al,8                 ; CMOS 08h - текущий мес€ц
+ 0000004A  E8 00000031		        call       print_cmos
+ 0000004F  B0 2D		        mov        al,'-'               ; еще один минус
+ 00000051  CD 29		        int        29h
+ 00000053  B0 07		        mov        al,7                 ; CMOS 07h - день
+ 00000055  E8 00000026		        call       print_cmos
+ 0000005A  B0 20		        mov        al,' '               ; пробел
+ 0000005C  CD 29		        int        29h
+ 0000005E  B0 04		        mov        al,4                 ; CMOS 04h - час
+ 00000060  E8 0000001B		        call       print_cmos
+ 00000065  B0 68		        mov        al,'h'               ; буква "h"
+ 00000067  CD 29		        int        29h
+ 00000069  B0 20		        mov        al,' '               ; пробел
+ 0000006B  CD 29		        int        29h
+ 0000006D  B0 02		        mov        al,2                 ; CMOS 02h - минута
+ 0000006F  E8 0000000C		        call       print_cmos
+ 00000074  B0 3A		        mov        al,':'               ; двоеточие
+ 00000076  CD 29		        int        29h
+ 00000078  B0 00		        mov        al,0h                ; CMOS 00h - секунда
+ 0000007A  E8 00000001		        call       print_cmos
+ 0000007F  C3			        ret
+ 00000080			start ENDP
+
+
+				; процедура print_cmos
+				; выводит на экран содержимое €чейки CMOS с номером в AL
+				; считает, что число, читаемое из CMOS, находитс€ в формате BCD
+ 00000080			print_cmos PROC
+ 00000080  E6 70		        out        70h,al               ; послать AL в индексный порт CMOS
+ 00000082  E4 71		        in         al,71h               ; прочитать данные
+ 00000084  66| 50		        push       ax
+ 00000086  C0 E8 04		        shr        al,4                 ; выделить старшие четыре бита
+ 00000089  04 30		        add        al,'0'               ; добавить ASCII-код цифры 0
+ 0000008B  CD 29		        int        29h                  ; вывести на экран
+ 0000008D  66| 58		        pop        ax
+ 0000008F  24 0F		        and        al,0Fh               ; выделить младшие четыре бита
+ 00000091  04 30		        add        al,30h               ; добавить ASCII-код цифры 0
+ 00000093  CD 29		        int        29h                  ; вывести на экран
+ 00000095  C3			        ret
+ 00000096			print_cmos endp
+
+				END
+
+
+				;int:
+				;1 - RCX
+				; 2 - RDX
+				;  3 - R8
+				;   4 - R9
+				;    ... - стек
+				;ret = RAX
+
+
+				;float:
+				;1 - XMM0
+				; 2 - XMM1
+				;  3 - XMM2
+				;   4 - XMM3
+				;    ... - стек
+				;ret = XMM0
+Microsoft (R) Macro Assembler (x64) Version 14.28.29913.0   03/31/21 14:06:36
+asmcode.asm						     Symbols 2 - 1
+
+
+
+
+Procedures, parameters, and locals:
+
+                N a m e                 Type     Value    Attr
+
+fooa . . . . . . . . . . . . . .	P 	 00000014 _TEXT	Length= 00000018 Public
+  cycle  . . . . . . . . . . . .	L 	 0000001B _TEXT	
+foo  . . . . . . . . . . . . . .	P 	 00000000 _TEXT	Length= 00000014 Public
+  cycle  . . . . . . . . . . . .	L 	 00000007 _TEXT	
+print_cmos . . . . . . . . . . .	P 	 00000080 _TEXT	Length= 00000016 Public
+start  . . . . . . . . . . . . .	P 	 0000002C _TEXT	Length= 00000054 Public
+
+
+Symbols:
+
+                N a m e                 Type     Value    Attr
+
+
+	   0 Warnings
+	   0 Errors
