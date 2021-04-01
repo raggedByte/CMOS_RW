@@ -40,7 +40,7 @@ UINT CommandDispatcher(PCHAR args)
 #endif
 		gets_s(inputString, sizeof(inputString));
 
-		scanned = sscanf_s(inputString, "%s %d %d", command, (UINT)sizeof(command), &arg0, &arg1);
+		scanned = sscanf_s(inputString, "%s %x %x", command, (UINT)sizeof(command), &arg0, &arg1);
 
 		switch (scanned)
 		{

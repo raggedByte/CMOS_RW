@@ -33,7 +33,6 @@ VOID __cdecl main(
 {
     HANDLE hDevice;
     BOOL bRc;
-    //BOOL bHexConverter = FALSE;
     ULONG bytesReturned;
     DWORD errNum = 0;
     TCHAR driverLocation[MAX_PATH];
@@ -96,21 +95,13 @@ VOID __cdecl main(
 
     printf("Driver is ready. . . \r\n\
 Type \"help\" for getting help usage\r\n");
-    //HexConverter = % d\r\n\
-    
+
     while (command != COMMAND_EXIT) {
 
         command = CommandDispatcher(InputBuffer);
 
         if (command == COMMAND_EXIT)
             break;
-
-        /*if (command == COMMAND_TURN_CONVERTER)
-        {
-            bHexConverter = !bHexConverter;
-            printf("HexConverter = %d\r\n", bHexConverter);
-            continue;
-        }*/
 
         bRc = FALSE;
         memset(OutputBuffer, 0, sizeof(OutputBuffer));
@@ -134,27 +125,50 @@ Type \"help\" for getting help usage\r\n");
             break;
         }
 
-        /*if (command == COMMAND_READ && bHexConverter)
-            HexConvertor(OutputBuffer, bytesReturned);*/
+        if (command == COMMAND_READ)
+        {
+            ULONG key = 0;
+            CHAR lborder = InputBuffer[0], rborder = InputBuffer[1];
 
-        printf("Response from driver(%d bytes): \r\n", bytesReturned);
-        for (ULONG i = 0; i < COLUMNS; i++)
-        {
-            printf("%-5X ", i);
-        }
-        printf("\r\n");
-        for (ULONG i = 0; i < COLUMNS; i++)
-        {
-            printf("======");
-        }
-        printf("\r\n");
-        for (ULONG i = 0; i < bytesReturned; i++)
-        {
-            printf("%-5X ", OutputBuffer[i]);
-            if ((i+1) % COLUMNS == 0)
+            printf("Response from driver(%d bytes): \r\n     ", bytesReturned);
+            for (ULONG i = 0; i < COLUMNS; i++)
+            {
+                printf("%-5X ", i);
+            }
+            printf("\r\n     ");
+            for (ULONG i = 0; i < COLUMNS; i++)
+            {
+                printf("======");
+            }
+            printf("\r\n");
+
+            ULONG i = 0;
+            while (key < rborder - lborder + 1)
+            {
+                ULONG rowByte = (lborder + i * COLUMNS) / COLUMNS;
+                printf("%-2X | ", rowByte * COLUMNS);
+                for (ULONG k = 0; k < COLUMNS; k++)
+                {
+                    if ((rowByte * COLUMNS + k) < lborder ||
+                        (rowByte * COLUMNS + k) > rborder)
+                    {
+                        printf("-     ");
+                    }
+                    else
+                    {
+                        printf("%-5X ", OutputBuffer[key++]);
+                    }
+                }
                 printf("\r\n");
+                i++;
+            }
         }
-        printf("\r\n");
+
+        if (command == COMMAND_WRITE)
+        {
+            if (OutputBuffer[0] == DRIVER_SUCCESS)
+                printf("OK \r\n");
+        }
 
         if ((command == COMMAND_READ && bytesReturned != (InputBuffer[1] - InputBuffer[0] + 1)) ||
             (command == COMMAND_WRITE && (DWORD)OutputBuffer[0] != (DWORD)DRIVER_SUCCESS))
@@ -162,8 +176,6 @@ Type \"help\" for getting help usage\r\n");
             printf("Received unxpected result! \r\n");
             break;
         }
-        
-        printf("Successful!\r\n");
     }
 
     printf("Exit . . .\r\n");
@@ -174,15 +186,5 @@ Type \"help\" for getting help usage\r\n");
         driverLocation,
         DRIVER_FUNC_REMOVE
     );
-}
 
-
-
-VOID HexConvertor(PCHAR array, INT arrayLength)
-{
-    for (INT i = 0; i < arrayLength; i++)
-    {
-        CHAR digitL = array[i] & 0x0F, digitH = (array[i] & 0xF0) >> 4;
-        array[i] = digitH * 10 + digitL;
-    }
 }
