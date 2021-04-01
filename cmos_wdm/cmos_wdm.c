@@ -136,7 +136,6 @@ NTSTATUS DeviceControlRoutine(
 	PCHAR outBuf;
 	PCHAR inBuf;
 	CHAR arg0, arg1;
-	//CHAR bcd;
 	INT bytesReaded = 0;
 
 	UNREFERENCED_PARAMETER(DeviceObject);
@@ -192,4 +191,3 @@ NTSTATUS DeviceControlRoutine(
 
 	return ntStatus;
 }
-
