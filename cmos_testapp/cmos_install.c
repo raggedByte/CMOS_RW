@@ -82,13 +82,11 @@ BOOLEAN ManageDriver(
 
     BOOLEAN rCode = TRUE;
 
-
     if (!DriverName || !ServiceName) {
 
         printf("Invalid Driver or Service provided to ManageDriver() \n");
         return FALSE;
     }
-
 
     schSCManager = OpenSCManager(NULL,
         NULL,
@@ -98,7 +96,6 @@ BOOLEAN ManageDriver(
     if (!schSCManager) {
 
         printf("Open SC Manager failed! Error = %d \n", GetLastError());
-
         return FALSE;
     }
 
@@ -138,15 +135,12 @@ BOOLEAN ManageDriver(
     default:
 
         printf("Unknown ManageDriver() function. \n");
-
         rCode = FALSE;
-
         break;
     }
 
 
     if (schSCManager) {
-
         CloseServiceHandle(schSCManager);
     }
 
@@ -170,19 +164,16 @@ BOOLEAN RemoveDriver(
     if (schService == NULL) {
 
         printf("OpenService failed!  Error = %d \n", GetLastError());
-
         return FALSE;
     }
 
     if (DeleteService(schService)) {
 
         rCode = TRUE;
-
     }
     else {
 
         printf("DeleteService failed!  Error = %d \n", GetLastError());
-
         rCode = FALSE;
     }
 
@@ -203,7 +194,6 @@ BOOLEAN StartDriver(
     SC_HANDLE   schService;
     DWORD       err;
 
-
     schService = OpenService(SchSCManager,
         DriverName,
         SERVICE_ALL_ACCESS
@@ -212,7 +202,6 @@ BOOLEAN StartDriver(
     if (schService == NULL) {
 
         printf("OpenService failed!  Error = %d \n", GetLastError());
-
         return FALSE;
     }
 
@@ -222,9 +211,7 @@ BOOLEAN StartDriver(
         err = GetLastError();
 
         if (err == ERROR_SERVICE_ALREADY_RUNNING) {
-
             return TRUE;
-
         }
         else {
 
@@ -262,7 +249,6 @@ BOOLEAN StopDriver(
     if (schService == NULL) {
 
         printf("OpenService failed!  Error = %d \n", GetLastError());
-
         return FALSE;
     }
 
@@ -270,19 +256,14 @@ BOOLEAN StopDriver(
         SERVICE_CONTROL_STOP,
         &serviceStatus
     )) {
-
         rCode = TRUE;
-
     }
     else {
-
         printf("ControlService failed!  Error = %d \n", GetLastError());
-
         rCode = FALSE;
     }
 
     if (schService) {
-
         CloseServiceHandle(schService);
     }
 
@@ -300,9 +281,7 @@ BOOLEAN SetupDriverName(
     driverLocLen = GetCurrentDirectory(BufferLength, DriverLocation);
 
     if (driverLocLen == 0) {
-
         printf("GetCurrentDirectory failed!  Error = %d \n", GetLastError());
-
         return FALSE;
     }
 
@@ -327,7 +306,6 @@ BOOLEAN SetupDriverName(
     }
 
     if (fileHandle) {
-
         CloseHandle(fileHandle);
     }
 

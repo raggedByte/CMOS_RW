@@ -1,7 +1,7 @@
 #include "windows.h"
 #include "stdio.h"
-//#include "cmosrw.h"
 #include "commands.h"
+#include "cmosrw.h"
 
 #define USER_PROMT TEXT("cmosrw")
 
@@ -13,11 +13,10 @@ VOID printUsage()
 		read <lborder> <rborder> - read cmos memory on range = [lborder, rborder] (inclusive)\r\n \
 		write <address> <byte> - write byte to cmos memory on address\r\n \
 		exit - terminate driver and app\r\n");
-		//hexconv - turn on\\off hex converter for readed bytes\r\n
 
 	printf("Examples:\r\n \
 		read 0 9 - read 10 byte starting at 0 address\r\n \
-		write 5 0 - write \"0\" to cmos at 5 address (return code 37 is Successful)\r\n");
+		write 5 0 - write \"0\" to cmos at 5 address \r\n");
 }
 
 UINT CommandDispatcher(PCHAR args)
@@ -61,29 +60,11 @@ UINT CommandDispatcher(PCHAR args)
 				commandType = COMMAND_READ;
 				isInterrupted = TRUE;
 			}
-			/*else if (!strcmp(command, "hexconv"))
-			{
-				commandType = COMMAND_TURN_CONVERTER;
-				isInterrupted = TRUE;
-			}*/
 			else
 			{
 				printf("Command not recognized! \r\n");
 			}
 			break;
-
-		/*case 2:
-			if (!strcmp(command, "bcd"))
-			{
-				commandType = COMMAND_BCD;
-				args[0] = arg0 > 0 ? 1 : 0;
-				isInterrupted = TRUE;
-			}
-			else
-			{
-				printf("Command not recognized! \r\n");
-			}
-			break;*/
 
 		case 3:
 			if (!strcmp(command, "read"))
